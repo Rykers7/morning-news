@@ -4,7 +4,6 @@ var router = express.Router();
 var uid2 = require('uid2')
 var SHA256 = require('crypto-js/sha256')
 var encBase64 = require('crypto-js/enc-base64')
-
 var userModel = require('../models/users')
 
 
@@ -92,6 +91,16 @@ router.post('/sign-in', async function(req,res,next){
   
 
   res.json({result, user, error, token})
+
+  router.delete('/delete-wish/:id', async function(res,req,next){
+    // var idArticle = req.params.id
+    // var articleDelete = await articleModel.deleteOne({_id : idArticle})
+
+
+
+    
+    res.json({})
+  })
 
 
 })
