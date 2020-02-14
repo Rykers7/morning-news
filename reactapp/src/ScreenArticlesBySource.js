@@ -14,22 +14,37 @@ function ScreenArticlesBySource(props) {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
+  //Récupérer les articles par sources
   useEffect(() => {
     const findArticles = async() => {
       const data = await fetch(`https://newsapi.org/v2/top-headlines?sources=${props.match.params.id}&apiKey=8775152e67e64aa78ab4abb4364632b6`)
       const body = await data.json()
-      console.log(body)
       setArticleList(body.articles) 
     }
-
-    findArticles()    
+    findArticles()  
   },[])
 
+  //Enregistrer les articles aimés en bdd
+
+  console.log("le toookkkkeeeeeeen", props.token)
+
+  var addarticletobdd = async (article) => {
+
+      const response = await fetch('/wishlist-article', {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `title=${article.title}&description=${article.description}&urlToImage=${article.urlToImage}&token=${props.token}`
+      }) 
+    
+    let resp = await response.json()
+    console.log("article liké dans la wishlist", resp) 
+  }
+
+//Modal
   var showModal = (title, content) => {
     setVisible(true)
     setTitle(title)
     setContent(content)
-
   }
 
   var handleOk = e => {
@@ -44,7 +59,6 @@ function ScreenArticlesBySource(props) {
 
   return (
     <div>
-         
             <Nav/>
 
             <div className="Banner"/>
@@ -69,9 +83,9 @@ function ScreenArticlesBySource(props) {
                   }
                   actions={[
                       <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title,article.content)} />,
-                      <Icon type="like" key="ellipsis" onClick={()=> {props.addToWishList(article)}} />
+                      <Icon type="like" key="ellipsis" onClick={()=> {props.addToWishList(article); addarticletobdd(article)}} />
                   ]}
-                  >
+                  > 
 
                   <Meta
                     title={article.title}
@@ -92,14 +106,8 @@ function ScreenArticlesBySource(props) {
 
               ))}
               
-
-
-            
-
            </div> 
 
-         
-      
       </div>
   );
 }
@@ -107,14 +115,16 @@ function ScreenArticlesBySource(props) {
 function mapDispatchToProps(dispatch){
   return {
     addToWishList: function(article){
-      dispatch({type: 'addArticle',
-        articleLiked: article
-      })
+      dispatch({type: 'addArticle', articleLiked: article})
     }
   }
 }
 
+function mapStateToProps(state){
+  return {articleInWishlist : state.wishList, token: state.token}
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ScreenArticlesBySource)
