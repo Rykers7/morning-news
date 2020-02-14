@@ -5,6 +5,7 @@ var uid2 = require('uid2')
 var SHA256 = require('crypto-js/sha256')
 var encBase64 = require('crypto-js/enc-base64')
 var userModel = require('../models/users')
+var articleModel = require('../models/article')
 
 
 router.post('/sign-up', async function(req,res,next){
@@ -91,6 +92,7 @@ router.post('/sign-in', async function(req,res,next){
   
 
   res.json({result, user, error, token})
+})
 
   router.delete('/delete-wish/:id', async function(res,req,next){
     // var idArticle = req.params.id
@@ -102,7 +104,27 @@ router.post('/sign-in', async function(req,res,next){
     res.json({})
   })
 
+router.post('/wishlist-article', async function(req, res, next) {
 
-})
+  console.log("ceci est un req body", req.body)
+
+  var articleSave = new articleModel({
+    title: req.body.title,
+    description: req.body.description,
+    urlToImage: req.body.urlToImage,
+    token: req.body.token,
+  })
+
+  var articleSave = await articleSave.save()
+
+  console.log("ceci est un résultat d'article", articleSave)
+  
+  var result = false
+  if(articleSave.title){
+    result = true
+  }
+
+  res.json({result, articleSave})
+});
 
 module.exports = router;

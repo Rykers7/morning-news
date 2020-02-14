@@ -14,7 +14,7 @@ import ScreenArticlesBySource from './ScreenArticlesBySource'
 import ScreenMyArticles from './ScreenMyArticles'
 import ScreenSource from './ScreenSource'
 
-const store = createStore(combineReducers({wishList, token, selectedLang}))
+const store = createStore(combineReducers({wishList, token, selectedLang}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 function App() {
   return (
