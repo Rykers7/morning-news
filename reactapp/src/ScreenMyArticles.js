@@ -36,6 +36,20 @@ function ScreenMyArticles(props) {
     noArticles = <div style={{marginTop:"30px"}}>No Articles</div>
   }
 
+  console.log(props.myArticles)
+
+  var deletearticle = async (myArticles) => {
+    console.log("ça passe dans delete")
+    console.log(myArticles.title)
+    const response = await fetch(`/delete-wish/${myArticles.title}`, {
+    method: 'DELETE',
+   
+  
+  })
+  var res = await response.json()
+  console.log(res)
+  }
+
   return (
     <div>
          
@@ -67,7 +81,7 @@ function ScreenMyArticles(props) {
                     }
                     actions={[
                         <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title,article.content)} />,
-                        <Icon type="delete" key="ellipsis" onClick={() => props.deleteToWishList(article.title)} />
+                        <Icon type="delete" key="ellipsis" onClick={() => {deletearticle(article); props.deleteToWishList(article.title)}} />
                     ]}
                     >
 

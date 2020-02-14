@@ -94,16 +94,6 @@ router.post('/sign-in', async function(req,res,next){
   res.json({result, user, error, token})
 })
 
-  router.delete('/delete-wish/:id', async function(res,req,next){
-    // var idArticle = req.params.id
-    // var articleDelete = await articleModel.deleteOne({_id : idArticle})
-
-
-
-    
-    res.json({})
-  })
-
 router.post('/wishlist-article', async function(req, res, next) {
 
   console.log("ceci est un req body", req.body)
@@ -126,5 +116,17 @@ router.post('/wishlist-article', async function(req, res, next) {
 
   res.json({result, articleSave})
 });
+
+
+router.delete('/delete-wish/:title', async function(req,res,next){
+
+  console.log("paraaaaams", req.params.title)
+
+  var articleDelete = await articleModel.deleteOne({title : req.params.title})
+
+  console.log("c'est passséééééé")
+  var result  = true
+  res.json({result})
+})
 
 module.exports = router;
